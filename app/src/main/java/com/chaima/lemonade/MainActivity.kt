@@ -50,12 +50,15 @@ class MainActivity : AppCompatActivity() {
         lemonImage = findViewById(R.id.image_lemon_state)
         setViewElements()
         lemonImage!!.setOnClickListener {
-
             // TODO: call the method that handles the state when the image is clicked
+
+
         }
         lemonImage!!.setOnLongClickListener {
             // TODO: replace 'false' with a call to the function that shows the squeeze count
+
             false
+
         }
     }
 
@@ -89,6 +92,29 @@ class MainActivity : AppCompatActivity() {
         //  INCREASED by 1 and lemonSize needs to be DECREASED by 1.
         //  - If the lemonSize has reached 0, it has been juiced and the state should become DRINK
         //  - Additionally, lemonSize is no longer relevant and should be set to -1
+        when (lemonadeState){
+            SELECT->{
+                lemonSize=lemonTree.pick()
+                squeezeCount=0
+                lemonadeState=SQUEEZE;
+            }
+            SQUEEZE->{
+                squeezeCount+=1
+                lemonSize=1
+                if(lemonSize==0){
+                    lemonadeState=DRINK
+                    lemonSize=-1
+                }
+            }
+            DRINK->{
+                lemonadeState=RESTART
+
+            }
+            else ->{
+                lemonadeState=SELECT
+            }
+
+        }
 
         // TODO: When the image is clicked in the DRINK state the state should become RESTART
 
@@ -111,6 +137,21 @@ class MainActivity : AppCompatActivity() {
         // TODO: Additionally, for each state, the lemonImage should be set to the corresponding
         //  drawable from the drawable resources. The drawables have the same names as the strings
         //  but remember that they are drawables, not strings.
+        when(lemonadeState){
+            SELECT->textAction.setText("click to select a lemon !")
+            SQUEEZE->textAction.setText("click to juice the lemon !")
+            DRINK->textAction.setText("click to drink your lemonade ")
+            RESTART->textAction.setText("click to start again ")
+
+        }
+        when (lemonadeState) {
+            SELECT -> lemonImage?.setImageResource(R.drawable.lemon_tree)
+            SQUEEZE -> lemonImage?.setImageResource(R.drawable.lemon_squeeze)
+            DRINK -> lemonImage?.setImageResource(R.drawable.lemon_drink)
+            RESTART -> lemonImage?.setImageResource(R.drawable.lemon_restart)
+        }
+        setViewElements()
+
     }
 
     /**
